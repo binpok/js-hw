@@ -1,42 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./style.css">
-  <script src="/module/main.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>Todo List</h2>
 
-  <div id="calculator">
-    <input type="text" id="display" disabled>
-    <div>
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button class="operator" data-operator="/">÷</button>
-    </div>
-    <div>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button class="operator" data-operator="*">×</button>
-    </div>
-    <div>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button class="operator" data-operator="-">-</button>
-    </div>
-    <div>
-      <button>0</button>
-      <button class="double">.</button>
-      <button class="equal">=</button>
-      <button class="operator" data-operator="+">+</button>
-      <button class="erase">Erase</button>
-    </div>
-  </div>
-  
+<input type="text" id="todoInput" placeholder="Add a new todo">
+<button onclick="addTodo()">Add</button>
 
-</body>
+<ul id="todoList"></ul>
+    <script src="./main.js"></script>
+  </body>
 </html>

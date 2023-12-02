@@ -1,70 +1,51 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const display = document.getElementById('display');
-  const buttons = document.querySelectorAll('#calculator button');
-  let currentInput = '';
-  let operator = '';
-  let firstOperand = '';
+ // Load todos from local storage
+  const storedTodos = JSON.parse(localStorage.getItem('todos')) || [];
+  const todoList = document.getElementById('todoList');
+  const todoInput = document.getElementById('todoInput');
 
-  buttons.forEach(button => {
-    button.addEventListener('click', function () {
-      const buttonText = this.textContent;
-
-      if (buttonText >= '0' && buttonText <= '9' || buttonText === '.') {
-        currentInput += buttonText;
-      } else if (button.classList.contains('operator')) {
-        if (currentInput !== '') {
-          firstOperand = currentInput;
-          operator = button.getAttribute('data-operator');
-          currentInput = '';
-        }
-      } else if (button.classList.contains('equal')) {
-        if (currentInput !== '' && firstOperand !== '') {
-          currentInput = calculate(firstOperand, operator, currentInput);
-          firstOperand = '';
-          operator = '';
-        }
-      } else if (button.classList.contains('erase')) {
-        eraseLast();
-      }
-
-      display.value = currentInput;
-    });
+  // Initialize todo list with stored todos
+  storedTodos.forEach((todo) => {
+    addTodoElement(todo);
   });
 
-  function calculate(num1, operator, num2) {
-    num1 = parseFloat(num1);
-    num2 = parseFloat(num2);
-
-    switch (operator) {
-      case '+':
-        return num1 + num2;
-      case '-':
-        return num1 - num2;
-      case '*':
-        return num1 * num2;
-      case '/':
-        if (num2 !== 0) {
-          return num1 / num2;
-        } else {
-          alert('Cannot divide by zero!');
-          clearCalculator();
-        }
-        break;
-      default:
-        return num2;
+  // Function to add a new todo
+  function addTodo() {
+    const todoText = todoInput.value.trim();
+    if (todoText !== '') {
+      const todo = { text: todoText, completed: false };
+      storedTodos.push(todo);
+      localStorage.setItem('todos', JSON.stringify(storedTodos));
+      addTodoElement(todo);
+      todoInput.value = '';
     }
   }
 
-  function eraseLast() {
-    // Clear the entire input
-    currentInput = '';
-    display.value = currentInput;
+  // Function to add a todo element to the list
+  function addTodoElement(todo) {
+    const li = document.createElement('li');
+    li.textContent = todo.text;
+    li.style.textDecoration = todo.completed ? 'line-through' : 'none';
+    li.addEventListener('click', () => toggleTodoCompletion(todo));
+
+    todoList.appendChild(li);
   }
 
-  function clearCalculator() {
-    currentInput = '';
-    operator = '';
-    firstOperand = '';
-    display.value = '';
+  // Function to toggle todo completion
+  function toggleTodoCompletion(todo) {
+    todo.completed = !todo.completed;
+    localStorage.setItem('todos', JSON.stringify(storedTodos));
+    refreshTodoList();
   }
-});
+
+  // Function to refresh the todo list
+  function refreshTodoList() {
+    // Clear the current list
+    while (todoList.firstChild) {
+      todoList.removeChild(todoList.firstChild);
+    }
+
+    // Re-populate the list with updated todos
+    storedTodos.forEach((todo) => {
+      addTodoElement(todo);
+    });
+  }
